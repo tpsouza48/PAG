@@ -4,7 +4,7 @@ from random import randint, choice
 class MapHandler():
     def __init__(self,  xSize=10, ySize=10, startingIndex=(0, 0)) -> None:
         self.map = []
-        self.curUID = -1 # Sets a unique id for each cell in the map.
+        self.curUID = -1 # Used to set a unique id for each cell in the map.
 
         # Map generation related: quantity of columns and rows.
         self.xSize = xSize

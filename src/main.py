@@ -1,5 +1,6 @@
 from modules.MapHandler import MapHandler
-import os
+from time import sleep as delay
+import os, keyboard
 
 map = MapHandler(xSize=15, ySize=5, startingIndex=(1, 1))
 
@@ -9,9 +10,33 @@ def showMap():
         map.show()
 
         cellInfo = map.getInfo()
-        print(f"\nYou are in: {cellInfo.name}")
+        print(f"\nYou are in: {cellInfo.name}.\nPress ENTER to exit the map.")
 
-        direction = input(">> ")
+        direction = None
+
+        delay(0.2)
+        while True:
+            try:
+                direction = None
+
+                if keyboard.is_pressed('up'): 
+                    direction = "up"
+                elif keyboard.is_pressed('down'): 
+                    direction = "down"
+                elif keyboard.is_pressed('left'): 
+                    direction = "left"
+                elif keyboard.is_pressed('right'): 
+                    direction = "right"
+                elif keyboard.is_pressed('enter'):
+                    direction = "close"
+                else:
+                    direction = None
+
+                if direction != None:
+                    delay(0.2)
+                    break
+            except:
+                pass
 
         if direction == "close":
             break
