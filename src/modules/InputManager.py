@@ -15,10 +15,13 @@ class InputManager():
             str:    The already validated input the user entered.
         """
         inp = str(input(text))
-    
+
         if inp == "":
-            print(errMsg)
-            input()
-            return self.strInput(text)
+            # If no error message, we jump the print and "enter to continue"
+            if errMsg: 
+                print(errMsg)
+                input()
+            
+            return self.strInput(text, errMsg=errMsg)
         else:
             return inp

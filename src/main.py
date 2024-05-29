@@ -39,11 +39,8 @@ class Game():
                         direction = "right"
                     elif keyboard.is_pressed('enter'):
                         direction = "close"
-                    else:
-                        direction = None
 
                     if direction != None:
-                        delay(0.2)
                         break
                 except:
                     pass
@@ -71,12 +68,12 @@ class Game():
                 continue
     
     def createPlayer(self):
-        nome = self.stdin.strInput("What is your name? >> ")
+        nome = self.stdin.strInput("What is your name? >> ", errMsg=None)
         print(nome)
         input()
 
     def run(self):
-        self.createPlayer()
+        #self.createPlayer()
 
         self.running = True
         self.__mainLoop()
