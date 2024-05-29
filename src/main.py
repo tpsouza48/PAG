@@ -1,4 +1,5 @@
 from modules.MapHandler import MapHandler
+from modules.SoundHandler import SoundHandler
 from modules.Player import Player
 from modules.InputManager import InputManager
 from time import sleep as delay
