@@ -14,6 +14,12 @@ class Game():
         self.stdin = InputManager()
         self.player = None
 
+    def clear(self):
+        if os.name == "nt":
+            os.system('cls')
+        else:
+            os.system('clear')
+
     def showMap(self):
         while True:
             os.system('cls')
@@ -52,28 +58,36 @@ class Game():
 
     def __mainLoop(self):
         while self.running:
-            os.system('cls')
+            self.clear()
             cellInfo = self.map.getInfo()
             print(f"-- {cellInfo.name} --")
 
-            print("\n1 - Placeholder")
+            print("\n1 - What's my name?")
             print("2 - Open map")
             opt = str(input("\n>> "))
 
             if opt == '1':
-                continue
+                print(self.player.name)
+                input()
             elif opt == '2':
                 self.showMap()
             else:
                 continue
     
     def createPlayer(self):
-        nome = self.stdin.strInput("What is your name? >> ", errMsg=None)
-        print(nome)
-        input()
+        name = self.stdin.strInput("What is your name? >> ", errMsg=None)
+        confirm = self.stdin.yesNo(f"\nYour character will be called {name}.\nDo you confirm? (y/n) >> ")
+        
+        while not confirm:
+            self.clear()
+            name = self.stdin.strInput("What is your name? >> ", errMsg=None)
+            confirm = self.stdin.yesNo(f"\nYour character will be called {name}.\nDo you confirm? (y/n) >> ")
+
+        self.player = Player(name, 100, {})
 
     def run(self):
-        #self.createPlayer()
+        self.clear()
+        self.createPlayer()
 
         self.running = True
         self.__mainLoop()

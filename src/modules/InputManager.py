@@ -25,3 +25,18 @@ class InputManager():
             return self.strInput(text, errMsg=errMsg)
         else:
             return inp
+        
+    def yesNo(self, text, errMsg="Invalid option. Try again."):
+        opt = str(input(text)).lower()
+
+        if opt in ("yes", "y"):
+            return True
+        elif opt in ("no", "n"):
+            return False
+        else:
+            # If no error message, we jump the print and "enter to continue"
+            if errMsg: 
+                print(errMsg)
+                input()
+            
+            return self.yesNo(text, errMsg=errMsg)
