@@ -27,7 +27,7 @@ class InputManager():
         else:
             return inp
         
-    def yesNo(self, text, errMsg="Invalid option. Try again.", clear=None):
+    def yesNo(self, text, errMsg="Invalid option. Try again."):
         opt = str(self.con.input(text)).lower()
 
         if opt in ("yes", "y"):
@@ -40,4 +40,4 @@ class InputManager():
                 self.con.print(f"[bold red]{errMsg}[/]")
                 self.con.input()
             
-            return False
+            return None
