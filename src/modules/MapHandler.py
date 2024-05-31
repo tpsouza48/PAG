@@ -2,7 +2,8 @@ from modules.GlobalConf import *
 from random import randint, choice
 
 class MapHandler():
-    def __init__(self,  xSize=10, ySize=10, startingIndex=(0, 0)) -> None:
+    def __init__(self, console, xSize=10, ySize=10, startingIndex=(0, 0)) -> None:
+        self.con = console
         self.map = []
         self.curUID = -1 # Used to set a unique id for each cell in the map.
 
@@ -60,10 +61,10 @@ class MapHandler():
     def show(self):
         for i in range(self.ySize):
             for j in range(self.xSize):
-                print(self.map[i][j].getIcon(), end=" ")
-            print("\n")
+                self.con.print(self.map[i][j].getIcon(), end=" ")
+            self.con.print("\n")
         if DEBUG:
-            print(self.__getCurrentCell().uid)
+            self.con.print(self.__getCurrentCell().uid)
     # "Interfaces" the internal move function with the word system
     def move(self, direction):
         # Horizontal

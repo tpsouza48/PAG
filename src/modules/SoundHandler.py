@@ -17,6 +17,11 @@ class SoundHandler():
         data = wf.readframes(1024)
 
         while True:
+            # Should not continue the loop.
+            if not tInfo[2]:
+                self.threads.remove(tInfo[0])
+                break
+
             stream.write(data)
             data = wf.readframes(1024)
             if data == b'':
@@ -31,14 +36,14 @@ class SoundHandler():
     def stop(self, threadId):
         for t in self.threads:
             if t[0] == threadId:
-                self.threads.remove(t)
+                t[2] = False
                 return True
 
         return False
 
     def play(self, name):
         tInfo = [self.currentId, None, True]
-        t = threading.Thread(target=self.__internalPlay, args=(self, name, tInfo))
+        t = threading.Thread(target=self.__internalPlay, args=(name, tInfo))
         t.start()
         
         tInfo[1] = t

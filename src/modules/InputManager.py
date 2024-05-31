@@ -1,6 +1,7 @@
 class InputManager():
-    def __init__(self, icon=">> ") -> None:
+    def __init__(self, console, icon=">> ") -> None:
         self.icon = icon
+        self.con = console
 
     # Used all across functions to accept and validate string-only input
     def strInput(self, text, errMsg="You should type text. Try again!") -> str:
@@ -14,20 +15,20 @@ class InputManager():
         Returns:
             str:    The already validated input the user entered.
         """
-        inp = str(input(text))
+        inp = str(self.con.input(f"[bold]{text}[/]"))
 
         if inp == "":
             # If no error message, we jump the print and "enter to continue"
             if errMsg: 
-                print(errMsg)
-                input()
+                self.con.print(errMsg)
+                self.con.input()
             
             return self.strInput(text, errMsg=errMsg)
         else:
             return inp
         
-    def yesNo(self, text, errMsg="Invalid option. Try again."):
-        opt = str(input(text)).lower()
+    def yesNo(self, text, errMsg="Invalid option. Try again.", clear=None):
+        opt = str(self.con.input(text)).lower()
 
         if opt in ("yes", "y"):
             return True
@@ -36,7 +37,7 @@ class InputManager():
         else:
             # If no error message, we jump the print and "enter to continue"
             if errMsg: 
-                print(errMsg)
-                input()
+                self.con.print(f"[bold red]{errMsg}[/]")
+                self.con.input()
             
-            return self.yesNo(text, errMsg=errMsg)
+            return False

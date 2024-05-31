@@ -2,17 +2,19 @@ from modules.MapHandler import MapHandler
 from modules.SoundHandler import SoundHandler
 from modules.Player import Player
 from modules.InputManager import InputManager
+from rich.console import Console
 from time import sleep as delay
 from random import randint
-import threading  # -> Use threading to implement sound and music later.
 import os, keyboard
 
 class Game():
     def __init__(self) -> None:
         self.running = False
 
-        self.map = MapHandler(xSize=15, ySize=5, startingIndex=(randint(0, 4), randint(0, 14)))
-        self.stdin = InputManager()
+        self.con = Console()
+        self.sound = SoundHandler()
+        self.map = MapHandler(self.con, xSize=15, ySize=5, startingIndex=(randint(0, 4), randint(0, 14)))
+        self.inputManager = InputManager(self.con)
         self.player = None
 
     def clear(self):
@@ -23,11 +25,11 @@ class Game():
 
     def showMap(self):
         while True:
-            os.system('cls')
+            self.clear()
             self.map.show()
 
             cellInfo = self.map.getInfo()
-            print(f"\nYou are in: {cellInfo.name}.\nPress ENTER to exit the map.")
+            self.con.print(f"\nYou are in: [bold]{cellInfo.name}[/].\nPress [bold]ENTER[/] to exit the map.")
 
             direction = None
 
@@ -61,28 +63,28 @@ class Game():
         while self.running:
             self.clear()
             cellInfo = self.map.getInfo()
-            print(f"-- {cellInfo.name} --")
+            self.con.print(f"-- {cellInfo.name} --")
 
-            print("\n1 - What's my name?")
-            print("2 - Open map")
-            opt = str(input("\n>> "))
+            self.con.print("\n1 - What's my name?")
+            self.con.print("2 - Open map")
+            opt = str(self.con.input("\n>> "))
 
             if opt == '1':
-                print(self.player.name)
-                input()
+                self.sound.play("C:/Users/pcrub/Documents/GitHub/PAG/src/modules/theme.mp3")
+                self.con.print(self.player.name)
+                self.con.input()
             elif opt == '2':
                 self.showMap()
             else:
                 continue
     
     def createPlayer(self):
-        name = self.stdin.strInput("What is your name? >> ", errMsg=None)
-        confirm = self.stdin.yesNo(f"\nYour character will be called {name}.\nDo you confirm? (y/n) >> ")
-        
-        while not confirm:
+        name = self.inputManager.strInput("[blue]What is your name?[/] >> ", errMsg=None)
+        confirm = self.inputManager.yesNo(f"\nYour character will be called [underline]{name}[/].\nDo you confirm? (y/n) >> ")
+
+        if not confirm:
             self.clear()
-            name = self.stdin.strInput("What is your name? >> ", errMsg=None)
-            confirm = self.stdin.yesNo(f"\nYour character will be called {name}.\nDo you confirm? (y/n) >> ")
+            return self.createPlayer()
 
         self.player = Player(name, 100, {})
 
